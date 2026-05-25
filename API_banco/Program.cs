@@ -17,13 +17,14 @@ builder.Services.AddControllers();
 // =============================
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
 });
+
 
 // =============================
 // ✅ OPENAPI (NO SwaggerGen)
@@ -63,7 +64,7 @@ app.MapScalarApiReference(options =>
 // ✅ Middleware
 // =============================
 app.UseRouting();
-app.UseCors();
+app.UseCors("AllowAll");
 
 // =============================
 // ✅ MANEJO GLOBAL DE ERRORES
