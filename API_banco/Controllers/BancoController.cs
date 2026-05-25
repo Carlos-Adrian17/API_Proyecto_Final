@@ -14,7 +14,7 @@ namespace API_banco.Controllers
             _service = service;
         }
 
-        // ✅ VALIDAR TARJETA
+        // ✅ VALIDAR PAGO
         [HttpPost("validar")]
         public IActionResult Validar(int cuentaId, decimal monto)
         {
@@ -22,13 +22,13 @@ namespace API_banco.Controllers
 
             return Ok(new
             {
-                autorizado = autorizado,
+                autorizado,
                 codigo = autorizado ? "00" : "51",
                 mensaje = autorizado ? "Aprobado" : "Fondos insuficientes"
             });
         }
 
-        // ✅ PROCESAR PAGO (LLAMADO POR SERVICIOS)
+        // ✅ PROCESAR PAGO
         [HttpPost("procesar")]
         public IActionResult Procesar(int cuentaId, decimal monto, string servicio)
         {
@@ -43,7 +43,7 @@ namespace API_banco.Controllers
                     mensaje = result
                 });
             }
-            catch (Exception)
+            catch
             {
                 return BadRequest(new
                 {
@@ -51,6 +51,22 @@ namespace API_banco.Controllers
                     codigo = "51",
                     mensaje = "Saldo insuficiente"
                 });
+            }
+        }
+
+        // ✅ TRANSFERENCIA
+        [HttpPost("transferir")]
+        public IActionResult Transferir(int origenId, int destinoId, decimal monto)
+        {
+            try
+            {
+                var result = _service.Transferir(origenId, destinoId, monto);
+
+                return Ok(new { mensaje = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
             }
         }
     }

@@ -14,8 +14,9 @@ namespace API_banco.Controllers
             _service = service;
         }
 
+        // ✅ LISTAR MOVIMIENTOS
         [HttpGet]
-        public IActionResult Obtener(int cuentaId)
+        public IActionResult Get(int cuentaId)
         {
             try
             {

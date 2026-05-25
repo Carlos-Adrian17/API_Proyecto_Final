@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using API_banco.Services;
+using API_banco.Models;
 
 namespace API_banco.Controllers
 {
@@ -14,18 +15,47 @@ namespace API_banco.Controllers
             _service = service;
         }
 
+        // ✅ REGISTRO
         [HttpPost("registro")]
-        public IActionResult Registrar(string nombre, string dpi, string password)
+        public IActionResult Registrar(
+            string nombre,
+            string dpi,
+            string correo,
+            string telefono,
+            string direccion,
+            string password)
         {
-            var cliente = _service.CrearCliente(nombre, dpi, password);
-            return Ok(cliente);
+            try
+            {
+                var cliente = _service.CrearCliente(
+                    nombre,
+                    dpi,
+                    correo,
+                    telefono,
+                    direccion,
+                    password);
+
+                return Ok(cliente);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
+        // ✅ LOGIN (POR DPI)
         [HttpPost("login")]
         public IActionResult Login(string dpi, string password)
         {
-            var cliente = _service.Login(dpi, password);
-            return Ok(cliente);
+            try
+            {
+                var cliente = _service.Login(dpi, password);
+                return Ok(cliente);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
 }

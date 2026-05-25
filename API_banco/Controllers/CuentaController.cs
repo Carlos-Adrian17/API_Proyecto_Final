@@ -14,6 +14,7 @@ namespace API_banco.Controllers
             _service = service;
         }
 
+        // ✅ CREAR CUENTA
         [HttpPost("crear")]
         public IActionResult Crear(int clienteId)
         {
@@ -28,13 +29,14 @@ namespace API_banco.Controllers
             }
         }
 
-        [HttpPost("deposito")]
-        public IActionResult Deposito(int cuentaId, decimal monto)
+        // ✅ CONSULTAR SALDO
+        [HttpGet("saldo")]
+        public IActionResult Saldo(int cuentaId)
         {
             try
             {
-                _service.Deposito(cuentaId, monto);
-                return Ok(new { mensaje = "Depósito exitoso" });
+                var saldo = _service.ConsultarSaldo(cuentaId);
+                return Ok(new { saldo });
             }
             catch (Exception ex)
             {
@@ -42,13 +44,14 @@ namespace API_banco.Controllers
             }
         }
 
-        [HttpGet("saldo")]
-        public IActionResult Saldo(int cuentaId)
+        // ✅ DEPÓSITO
+        [HttpPost("deposito")]
+        public IActionResult Deposito(int cuentaId, decimal monto)
         {
             try
             {
-                var saldo = _service.ConsultarSaldo(cuentaId);
-                return Ok(new { saldo = saldo });
+                _service.Deposito(cuentaId, monto);
+                return Ok(new { mensaje = "Depósito realizado" });
             }
             catch (Exception ex)
             {
